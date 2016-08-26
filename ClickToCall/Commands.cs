@@ -78,7 +78,7 @@ namespace ClickToCall
             }
             else
             {
-                result = SendCommand(credentials, ip, $@"<CiscoIPPhoneExecute><ExecuteItem Priority='3' URL='Dial: {phoneNumber}'/></ CiscoIPPhoneExecute>");
+                result = SendCommand(credentials, ip, $@"<CiscoIPPhoneExecute><ExecuteItem Priority='3' URL='Dial: {phoneNumber}'/></CiscoIPPhoneExecute>");
             }
 
             return result;
