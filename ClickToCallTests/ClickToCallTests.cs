@@ -12,10 +12,10 @@ namespace ClickToCall.Tests
     [TestClass()]
     public class ClickToCallTests
     {
-        static string _username = "Jerry.cain";
-        static string _password = "Eial.Amtatm.";
+        static string _username = "";
+        static string _password = "";
         NetworkCredential credential = new NetworkCredential(_username, _password);
-        IPAddress ipAddress = IPAddress.Parse("10.8.65.11");
+        IPAddress ipAddress = IPAddress.Parse("");
         string ringXml = @"<CiscoIPPhoneExecute><ExecuteItem Priority='2' URL='Play:Classic1.raw' /></CiscoIPPhoneExecute>";
 
         [TestMethod()]
