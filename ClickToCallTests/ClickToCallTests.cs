@@ -19,8 +19,8 @@ namespace ClickToCall.Tests
         [TestMethod()]
         public void SuccessTest()
         {
-            var instance  = new ClickToCall();
-            var result = instance.Send(new System.Net.NetworkCredential(username, password), 
+            var instance  = new Commands();
+            var result = instance.SendCommand(new System.Net.NetworkCredential(username, password), 
                             System.Net.IPAddress.Parse(ipAddress), 
                             ringXml);
             Assert.IsTrue(result);
@@ -29,11 +29,11 @@ namespace ClickToCall.Tests
         [TestMethod()]
         public void BadUsernameTest()
         {
-            var instance = new ClickToCall();
+            var instance = new Commands();
             bool result =false;
             try
             {
-                result = instance.Send(new System.Net.NetworkCredential("", ""), System.Net.IPAddress.Parse("10.8.65.11"), @"<CiscoIPPhoneExecute><ExecuteItem Priority='2' URL='Play:Classic1.raw' /></CiscoIPPhoneExecute>");
+                result = instance.SendCommand(new System.Net.NetworkCredential("", ""), System.Net.IPAddress.Parse("10.8.65.11"), @"<CiscoIPPhoneExecute><ExecuteItem Priority='2' URL='Play:Classic1.raw' /></CiscoIPPhoneExecute>");
             }
             catch (Exception e)
             {
@@ -42,6 +42,25 @@ namespace ClickToCall.Tests
                     result = true;
                 }
             }                  
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod()]
+        public void IsNumberTest()
+        {
+            var instance = new Commands();
+            bool result = false;
+            try
+            {
+                result = instance.MakeCall(new System.Net.NetworkCredential("", ""), System.Net.IPAddress.Parse("10.8.65.11"), "***REMOVED***");
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("401"))
+                {
+                    result = true;
+                }
+            }
             Assert.IsTrue(result);
         }
     }
