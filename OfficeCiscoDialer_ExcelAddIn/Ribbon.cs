@@ -9,6 +9,7 @@ using System.Text;
 using OfficeCiscoDialer_ExcelAddIn.Properties;
 using Office = Microsoft.Office.Core;
 using System.Security.Cryptography;
+using Microsoft.Office.Interop.Excel;
 
 // TODO:  Follow these steps to enable the Ribbon (XML) item:
 
@@ -36,13 +37,14 @@ namespace OfficeCiscoDialer_ExcelAddIn
     {
         private Office.IRibbonUI ribbon;
         private string _username;
-        private string _password;
+        private string _passwordEncoded;
         private string _phoneIP;
 
         public Ribbon()
         {
             _phoneIP = Settings.Default.PhoneIP;
             _username = Settings.Default.Username;
+            _passwordEncoded = Settings.Default.Password;
         }
 
         public string GetUsername(Office.IRibbonControl control)
@@ -63,28 +65,33 @@ namespace OfficeCiscoDialer_ExcelAddIn
 
         public void Password_TextChanged(Office.IRibbonControl control, string text)
         {
-            _password = text;
-            var cred = new NetworkCredential(_username, _password);
-            var test = new ClickToCall.Commands();
-            test.RingTest(cred, IPAddress.Parse(_phoneIP));
+            Settings.Default.Password = Encode(text);
+            ribbon.InvalidateControl("passWord");
+            Settings.Default.Save();
+            
+
+            //var cred = new NetworkCredential(_username, _password);
+            //var test = new ClickToCall.Commands();
+            //test.RingTest(cred, IPAddress.Parse(_phoneIP));
 
             //Settings.Default.Password = text;
         }
 
-        private void Test()
+        private string Encode(string input)
         {
-            // Data to protect. Convert a string to a byte[] using Encoding.UTF8.GetBytes().
-            byte[] plaintext = Encoding.UTF8.GetBytes("TeSt");
+            var plaintext = Encoding.UTF8.GetBytes(input);
 
             // Generate additional entropy (will be used as the Initialization vector)
-            byte[] entropy = new byte[20];
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            var entropy = new byte[20];
+            using (var rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(entropy);
             }
 
-            byte[] ciphertext = ProtectedData.Protect(plaintext, entropy,
+            var ciphertext = ProtectedData.Protect(plaintext, entropy,
                 DataProtectionScope.CurrentUser);
+
+            return Convert.ToBase64String(ciphertext);
         }
 
         public void PhoneIP_TextChanged(Office.IRibbonControl control, string text)
@@ -95,9 +102,19 @@ namespace OfficeCiscoDialer_ExcelAddIn
 
         public void TestSettings(Office.IRibbonControl control)
         {
-            var cred = new NetworkCredential(_username,_password);
+            var cred = new NetworkCredential(_username,_passwordEncoded);
             var test = new ClickToCall.Commands();
             test.RingTest(cred, IPAddress.Parse(_phoneIP));
+        }
+
+        public string GetPassword(Office.IRibbonControl control)
+        {
+            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
+            {
+                return "******";
+            }
+            return "";
+
         }
 
         #region IRibbonExtensibility Members
