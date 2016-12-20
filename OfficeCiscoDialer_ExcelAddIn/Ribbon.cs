@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using OfficeCiscoDialer_ExcelAddIn.Properties;
 using Office = Microsoft.Office.Core;
@@ -94,6 +95,16 @@ namespace OfficeCiscoDialer_ExcelAddIn
             return Convert.ToBase64String(ciphertext);
         }
 
+        private SecureString Decode(string encoded)
+        {
+            var unencoded = System.Convert.FromBase64String(encoded);
+            var ss = new SecureString();
+            foreach (var c in Encoding.UTF8.GetChars(ProtectedData.Unprotect(unencoded, new byte[20], DataProtectionScope.CurrentUser)))
+            {
+                ss.AppendChar(c);
+            }
+            return ss;
+        }
         public void PhoneIP_TextChanged(Office.IRibbonControl control, string text)
         {
             Settings.Default.PhoneIP = _phoneIP = text;
@@ -102,9 +113,13 @@ namespace OfficeCiscoDialer_ExcelAddIn
 
         public void TestSettings(Office.IRibbonControl control)
         {
-            var cred = new NetworkCredential(_username,_passwordEncoded);
-            var test = new ClickToCall.Commands();
-            test.RingTest(cred, IPAddress.Parse(_phoneIP));
+            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
+            {
+                var cred = new NetworkCredential(_username, Decode(_passwordEncoded));
+                var test = new ClickToCall.Commands();
+                test.RingTest(cred, IPAddress.Parse(_phoneIP));
+            }
+
         }
 
         public string GetPassword(Office.IRibbonControl control)

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
-    <ribbon>
+<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+    <!--<ribbon>
         <tabs>
             <tab idMso="TabAddIns">
                 <group id="group1" label="group1">
@@ -13,5 +13,37 @@
               </group>
             </tab>
         </tabs>
-    </ribbon>
+    </ribbon>-->
+  <backstage>
+    <tab id="testArea" label="Cisco Dialer" insertAfterMso="TabInfo" visible="true" >
+      <firstColumn>
+        <group id="settings" label="Settings">
+          <primaryItem>
+            <button id="btnTest" label="Test Settings" onAction="TestSettings" imageMso="BevelShapeGallery" />
+          </primaryItem>
+          <topItems>
+            <layoutContainer id="layoutOne" layoutChildren="vertical">
+              <editBox id="userName" onChange="Username_TextChanged" label="Username" getText="GetUsername" alignLabel="topRight"/>
+              <editBox id="passWord" onChange="Password_TextChanged" label="Password" getText="GetPassword"/>
+              <editBox id="phoneIP" onChange="PhoneIP_TextChanged" label="Phone IP" getText="GetPhoneIP" />
+            </layoutContainer>
+          </topItems>
+        </group>
+        <!--<group id="grpTwo" label="Group Two" >
+          <primaryItem>
+            <menu id="menuOne" label="Drop Down Menu">
+              <menuGroup id="menuGrpOne" >
+                <button id="menuButtonOne" label="Menu Button" />
+                <button id="menuButtonTwo" label=" Menu Button" />
+                <checkBox id="chkBox" label="CheckBox" />
+              </menuGroup>
+            </menu>
+          </primaryItem>
+          <topItems>
+            <editBox id="ebox3" label="Edit Box"/>
+          </topItems>
+        </group>-->
+      </firstColumn>
+    </tab>
+  </backstage>
 </customUI>

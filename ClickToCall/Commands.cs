@@ -26,9 +26,7 @@ namespace ClickToCall
         /// <returns></returns>
         public bool SendCommand(NetworkCredential credentials, IPAddress ip, string command, int timeout = 30 * 1000)
         {
-            bool result;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
-                            string.Format("http://{0}/CGI/Execute", ip));
+            var request = (HttpWebRequest)WebRequest.Create($"http://{ip}/CGI/Execute");
             request.Timeout = timeout;
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
@@ -36,17 +34,17 @@ namespace ClickToCall
 
             //request.UseDefaultCredentials = true;
             request.PreAuthenticate = true;
-            byte[] bytes = Encoding.UTF8.GetBytes(@"XML=" + HttpUtility.UrlEncode(command));
+            var bytes = Encoding.UTF8.GetBytes(@"XML=" + HttpUtility.UrlEncode(command));
 
             var outStream = request.GetRequestStream();
             outStream.Write(bytes, 0, bytes.Length);
             outStream.Close();
 
-            WebResponse response = request.GetResponse();
+            var response = request.GetResponse();
 
             var nodes = XElement.Load(response.GetResponseStream());
 
-            result = nodes.Element("ResponseItem")?.Attribute("Status")?.Value == "0";
+            var result = nodes.Element("ResponseItem")?.Attribute("Status")?.Value == "0";
 
             response.Close();
 
