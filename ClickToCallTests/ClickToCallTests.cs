@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 
-namespace ClickToCall.Tests
+namespace ClickToCallTests
 {
     [TestClass()]
     public class ClickToCallTests
