@@ -4,10 +4,13 @@
         <tabs>
             <tab idMso="TabAddIns">
                 <group id="group1" label="group1">
-                    <editBox id="userName" onChange="userName_TextChanged" label="Username" getText="GetUsername" showImage="false" />
-                    <editBox id="passWord" onChange="passWord_TextChanged" label="Password" showImage="false" />
-                    <editBox id="phoneIP" onChange="phoneIP_TextChanged" label="Phone IP" getText="GetPhoneIP" showImage="false" />
+                    <editBox id="userName" onChange="Username_TextChanged" label="Username" getText="GetUsername" showImage="false" />
+                    <editBox id="passWord" onChange="Password_TextChanged" label="Password" showImage="false" />
+                    <editBox id="phoneIP" onChange="PhoneIP_TextChanged" label="Phone IP" getText="GetPhoneIP" showImage="false" />
                 </group>
+              <group id="group2" label="group2">         
+                <button label="Test" onAction="TestSettings"/>
+              </group>
             </tab>
         </tabs>
     </ribbon>

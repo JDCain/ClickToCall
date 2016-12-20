@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using OfficeCiscoDialer_ExcelAddIn.Properties;
 using Office = Microsoft.Office.Core;
+using System.Security.Cryptography;
 
 // TODO:  Follow these steps to enable the Ribbon (XML) item:
 
@@ -55,19 +57,47 @@ namespace OfficeCiscoDialer_ExcelAddIn
 
         public void Username_TextChanged(Office.IRibbonControl control, string text)
         {
-            Settings.Default.Username = text;
+            Settings.Default.Username = _username = text;
             Settings.Default.Save();
         }
 
         public void Password_TextChanged(Office.IRibbonControl control, string text)
         {
+            _password = text;
+            var cred = new NetworkCredential(_username, _password);
+            var test = new ClickToCall.Commands();
+            test.RingTest(cred, IPAddress.Parse(_phoneIP));
+
             //Settings.Default.Password = text;
+        }
+
+        private void Test()
+        {
+            // Data to protect. Convert a string to a byte[] using Encoding.UTF8.GetBytes().
+            byte[] plaintext = Encoding.UTF8.GetBytes("TeSt");
+
+            // Generate additional entropy (will be used as the Initialization vector)
+            byte[] entropy = new byte[20];
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(entropy);
+            }
+
+            byte[] ciphertext = ProtectedData.Protect(plaintext, entropy,
+                DataProtectionScope.CurrentUser);
         }
 
         public void PhoneIP_TextChanged(Office.IRibbonControl control, string text)
         {
-            Settings.Default.PhoneIP = text;
+            Settings.Default.PhoneIP = _phoneIP = text;
             Settings.Default.Save();
+        }
+
+        public void TestSettings(Office.IRibbonControl control)
+        {
+            var cred = new NetworkCredential(_username,_password);
+            var test = new ClickToCall.Commands();
+            test.RingTest(cred, IPAddress.Parse(_phoneIP));
         }
 
         #region IRibbonExtensibility Members
