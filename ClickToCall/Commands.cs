@@ -46,15 +46,7 @@ namespace ClickToCall
 
             var nodes = XElement.Load(response.GetResponseStream());
 
-            if (nodes.Element("ResponseItem").Attribute("Status").Value != "0")
-            {
-                throw new CiscoException(nodes.Element("ResponseItem").Attribute("Data").Value,
-                                        int.Parse(nodes.Element("ResponseItem").Attribute("Status").Value));
-            }
-            else
-            {
-                result = true;
-            }
+            result = nodes.Element("ResponseItem")?.Attribute("Status")?.Value == "0";
 
             response.Close();
 
