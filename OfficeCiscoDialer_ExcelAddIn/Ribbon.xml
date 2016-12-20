@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
+    <ribbon>
+        <tabs>
+            <tab idMso="TabAddIns">
+                <group id="group1" label="group1">
+                    <editBox id="userName" onChange="userName_TextChanged" label="Username" getText="GetUsername" showImage="false" />
+                    <editBox id="passWord" onChange="passWord_TextChanged" label="Password" showImage="false" />
+                    <editBox id="phoneIP" onChange="phoneIP_TextChanged" label="Phone IP" getText="GetPhoneIP" showImage="false" />
+                </group>
+            </tab>
+        </tabs>
+    </ribbon>
+</customUI>
