@@ -36,115 +36,15 @@ using Microsoft.Office.Interop.Excel;
 namespace OfficeCiscoDialer_ExcelAddIn
 {
     [ComVisible(true)]
-    public class Ribbon : Office.IRibbonExtensibility
+    public partial class Ribbon : Office.IRibbonExtensibility
     {
         private Office.IRibbonUI ribbon;
-        private string _username;
-        private string _passwordEncoded;
-        private string _phoneIP;
 
         public Ribbon()
         {
-            _phoneIP = Settings.Default.PhoneIP;
-            _username = Settings.Default.Username;
-            _passwordEncoded = Settings.Default.Password;
-        }
-
-        public string GetUsername(Office.IRibbonControl control)
-        {
-            return _username;
-        }
-
-        public string GetPhoneIP(Office.IRibbonControl control)
-        {
-            return _phoneIP;
-        }
-
-        public void Username_TextChanged(Office.IRibbonControl control, string text)
-        {
-            Settings.Default.Username = _username = text;
-            Settings.Default.Save();
-        }
-
-        public void Password_TextChanged(Office.IRibbonControl control, string text)
-        {
-            Settings.Default.Password = Encode(text);
-            ribbon.InvalidateControl("passWord");
-            Settings.Default.Save();
-            _passwordEncoded = Settings.Default.Password;
-
-
-            //var cred = new NetworkCredential(_username, _password);
-            //var test = new ClickToCall.Commands();
-            //test.RingTest(cred, IPAddress.Parse(_phoneIP));
-
-            //Settings.Default.Password = text;
-        }
-
-        private string Encode(string input)
-        {
-            var plaintext = Encoding.UTF8.GetBytes(input);
-
-            // Generate additional entropy (will be used as the Initialization vector)
-            //var entropy = new byte[20];
-            //using (var rng = new RNGCryptoServiceProvider())
-            //{
-            //    rng.GetBytes(entropy);
-            //}
-
-            var ciphertext = ProtectedData.Protect(plaintext, null,
-                DataProtectionScope.CurrentUser);
-
-            return Convert.ToBase64String(ciphertext);
-        }
-
-        private SecureString Decode(string encoded)
-        {
-            var unencoded = System.Convert.FromBase64String(encoded);
-            var ss = new SecureString();
-            var x = ProtectedData.Unprotect(unencoded, null, DataProtectionScope.CurrentUser);
-            foreach (var c in Encoding.UTF8.GetChars(x))
-            {
-                ss.AppendChar(c);
-            }
-            return ss;
-        }
-        public void PhoneIP_TextChanged(Office.IRibbonControl control, string text)
-        {
-            Settings.Default.PhoneIP = _phoneIP = text;
-            Settings.Default.Save();
-        }
-
-        public void TestSettings(Office.IRibbonControl control)
-        {
-            bool result = false;
-            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
-            {
-                var cred = new NetworkCredential(_username, Decode(_passwordEncoded));
-                var test = new ClickToCall.Commands();
-                result = test.RingTest(cred, IPAddress.Parse(_phoneIP));
-            }
-            else
-            {
-                MessageBox.Show("Password IsNullOrWhiteSpace failed.", "Error");
-            }
-
-            if (!result)
-            {
-                MessageBox.Show("Failed", "Failed");
-            }
 
         }
 
-        public string GetPassword(Office.IRibbonControl control)
-        {
-            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
-            {
-                return "******";
-            }
-            return "";
-
-        }
 
         public bool IsVisible(Office.IRibbonControl control)
         {
