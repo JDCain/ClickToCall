@@ -10,6 +10,7 @@ using System.Text;
 using OfficeCiscoDialer_ExcelAddIn.Properties;
 using Office = Microsoft.Office.Core;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 using libphonenumber;
 using Microsoft.Office.Interop.Excel;
 
@@ -70,7 +71,8 @@ namespace OfficeCiscoDialer_ExcelAddIn
             Settings.Default.Password = Encode(text);
             ribbon.InvalidateControl("passWord");
             Settings.Default.Save();
-            
+            _passwordEncoded = Settings.Default.Password;
+
 
             //var cred = new NetworkCredential(_username, _password);
             //var test = new ClickToCall.Commands();
@@ -115,11 +117,21 @@ namespace OfficeCiscoDialer_ExcelAddIn
 
         public void TestSettings(Office.IRibbonControl control)
         {
+            bool result = false;
             if (!string.IsNullOrWhiteSpace(_passwordEncoded))
             {
                 var cred = new NetworkCredential(_username, Decode(_passwordEncoded));
                 var test = new ClickToCall.Commands();
-                test.RingTest(cred, IPAddress.Parse(_phoneIP));
+                result = test.RingTest(cred, IPAddress.Parse(_phoneIP));
+            }
+            else
+            {
+                MessageBox.Show("Password IsNullOrWhiteSpace failed.", "Error");
+            }
+
+            if (!result)
+            {
+                MessageBox.Show("Failed", "Failed");
             }
 
         }
