@@ -10,6 +10,7 @@ using System.Text;
 using OfficeCiscoDialer_ExcelAddIn.Properties;
 using Office = Microsoft.Office.Core;
 using System.Security.Cryptography;
+using libphonenumber;
 using Microsoft.Office.Interop.Excel;
 
 // TODO:  Follow these steps to enable the Ribbon (XML) item:
@@ -130,6 +131,27 @@ namespace OfficeCiscoDialer_ExcelAddIn
             }
             return "";
 
+        }
+
+        public bool IsVisible(Office.IRibbonControl control)
+        {
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.Instance;
+            var phoneNumberString = PhoneNumberUtil.NormalizeDigitsOnly(GetSelection());
+            var nb = phoneUtil.Parse(phoneNumberString, "us");
+            
+            return nb.IsValidNumber;
+        }
+
+        private string GetSelection()
+        {
+            var range = Globals.ThisAddIn.Application.Selection as Range;
+            if (range?.Cells.Count == 1
+                && range?.Cells[1, 1].Value != null)
+            {
+                var x = range?.Cells[1, 1].Value;
+                return x?.ToString();
+            }
+            return null;
         }
 
         #region IRibbonExtensibility Members

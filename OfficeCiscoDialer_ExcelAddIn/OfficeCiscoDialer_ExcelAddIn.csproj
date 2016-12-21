@@ -105,6 +105,10 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="libphonenumber, Version=5.8.606.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.LibPhoneNumber.1.0.0\lib\libphonenumber.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -166,6 +170,7 @@
     </Compile>
     <None Include="app.config" />
     <None Include="codesigning.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
