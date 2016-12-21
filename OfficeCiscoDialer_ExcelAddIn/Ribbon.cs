@@ -84,13 +84,13 @@ namespace OfficeCiscoDialer_ExcelAddIn
             var plaintext = Encoding.UTF8.GetBytes(input);
 
             // Generate additional entropy (will be used as the Initialization vector)
-            var entropy = new byte[20];
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(entropy);
-            }
+            //var entropy = new byte[20];
+            //using (var rng = new RNGCryptoServiceProvider())
+            //{
+            //    rng.GetBytes(entropy);
+            //}
 
-            var ciphertext = ProtectedData.Protect(plaintext, entropy,
+            var ciphertext = ProtectedData.Protect(plaintext, null,
                 DataProtectionScope.CurrentUser);
 
             return Convert.ToBase64String(ciphertext);
@@ -100,7 +100,8 @@ namespace OfficeCiscoDialer_ExcelAddIn
         {
             var unencoded = System.Convert.FromBase64String(encoded);
             var ss = new SecureString();
-            foreach (var c in Encoding.UTF8.GetChars(ProtectedData.Unprotect(unencoded, new byte[20], DataProtectionScope.CurrentUser)))
+            var x = ProtectedData.Unprotect(unencoded, null, DataProtectionScope.CurrentUser);
+            foreach (var c in Encoding.UTF8.GetChars(x))
             {
                 ss.AppendChar(c);
             }
@@ -137,9 +138,27 @@ namespace OfficeCiscoDialer_ExcelAddIn
         {
             PhoneNumberUtil phoneUtil = PhoneNumberUtil.Instance;
             var phoneNumberString = PhoneNumberUtil.NormalizeDigitsOnly(GetSelection());
-            var nb = phoneUtil.Parse(phoneNumberString, "us");
+            var nb = phoneUtil.Parse(phoneNumberString, "US");
             
             return nb.IsValidNumber;
+        }
+
+        public void DialNumber(Office.IRibbonControl control)
+        {
+            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
+            {
+                var cred = new NetworkCredential(_username, Decode(_passwordEncoded));
+                var test = new ClickToCall.Commands();
+                test.MakeCall(cred, IPAddress.Parse(_phoneIP), GetNumber());
+            }
+        }
+
+        private string GetNumber()
+        {
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.Instance;
+            var phoneNumberString = PhoneNumberUtil.NormalizeDigitsOnly(GetSelection());
+            var nb = phoneUtil.Parse(phoneNumberString, "US");
+            return $"91{nb.NationalNumber}";
         }
 
         private string GetSelection()

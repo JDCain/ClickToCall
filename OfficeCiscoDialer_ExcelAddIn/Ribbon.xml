@@ -46,4 +46,10 @@
       </firstColumn>
     </tab>
   </backstage>
+  <contextMenus>
+    <contextMenu idMso="ContextMenuCell">
+        <button id="dial" label="Dial" insertBeforeMso="Cut" getVisible="IsVisible" onAction="DialNumber" imageMso="GetExternalDataFromText"/>
+      <menuSeparator id="MySeparator" insertBeforeMso="Cut"/>
+    </contextMenu>
+  </contextMenus>
 </customUI>

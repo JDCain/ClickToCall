@@ -27,13 +27,13 @@ namespace ClickToCallTests
             byte[] plaintext = Encoding.UTF8.GetBytes("TeSt");
 
             // Generate additional entropy (will be used as the Initialization vector)
-            byte[] entropy = new byte[20];
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(entropy);
-            }
+            //byte[] entropy = new byte[20];
+            //using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            //{
+            //    rng.GetBytes(entropy);
+            //}
 
-            byte[] ciphertext = ProtectedData.Protect(plaintext, entropy,
+            byte[] ciphertext = ProtectedData.Protect(plaintext, null,
                 DataProtectionScope.CurrentUser);
 
             string encoded = System.Convert.ToBase64String(ciphertext);
@@ -42,10 +42,13 @@ namespace ClickToCallTests
 
             Assert.IsTrue(ciphertext.SequenceEqual(unencoded));
 
-            byte[] plaintextout = ProtectedData.Unprotect(ciphertext, entropy, DataProtectionScope.CurrentUser);
+            byte[] plainbytetout = ProtectedData.Unprotect(unencoded, null, DataProtectionScope.CurrentUser);
+
+            
+
 
             var ss = new SecureString();
-            foreach (var c in Encoding.UTF8.GetChars(plaintextout))
+            foreach (var c in Encoding.UTF8.GetChars(plainbytetout))
             {
                 ss.AppendChar(c);
             }
