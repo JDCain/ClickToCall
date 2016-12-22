@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using OfficeCiscoDialer_ExcelAddIn.Properties;
 
 namespace OfficeCiscoDialer_ExcelAddIn
 {
@@ -69,33 +64,13 @@ namespace OfficeCiscoDialer_ExcelAddIn
 
         public void TestSettings(Microsoft.Office.Core.IRibbonControl control)
         {
-            bool result = false;
-            if (!string.IsNullOrWhiteSpace(EncodedPassword))
-            {
-                var cred = new NetworkCredential(Username, Decode(EncodedPassword));
-                
-                result = _click.RingTest(cred, IPAddress.Parse(PhoneIP));
-            }
-            else
-            {
-                MessageBox.Show("Password IsNullOrWhiteSpace failed.", "Error");
-            }
-
-            if (!result)
-            {
-                MessageBox.Show("Failed", "Failed");
-            }
-
+            Func<bool> func = () => _clickToCall.RingTest(_credential, IPAddress.Parse(PhoneIP));
+            CheckAndCall(func);
         }
 
         public string GetPassword(Microsoft.Office.Core.IRibbonControl control)
         {
-            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
-            {
-                return "******";
-            }
-            return "";
-
+            return !string.IsNullOrWhiteSpace(EncodedPassword) ? "**********" : string.Empty;
         }
 
     }

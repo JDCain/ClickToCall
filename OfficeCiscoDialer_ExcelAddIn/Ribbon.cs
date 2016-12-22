@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using libphonenumber;
+using Microsoft.Office.Interop.Excel;
+using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using OfficeCiscoDialer_ExcelAddIn.Properties;
 using Office = Microsoft.Office.Core;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-using libphonenumber;
-using Microsoft.Office.Interop.Excel;
 
 // TODO:  Follow these steps to enable the Ribbon (XML) item:
 
@@ -40,29 +33,16 @@ namespace OfficeCiscoDialer_ExcelAddIn
     {
         private Office.IRibbonUI ribbon;
 
-        public Ribbon()
-        {
-
-        }
-
-
         public bool IsVisible(Office.IRibbonControl control)
         {
-            PhoneNumberUtil phoneUtil = PhoneNumberUtil.Instance;
-            var phoneNumberString = PhoneNumberUtil.NormalizeDigitsOnly(GetSelection());
-            var nb = phoneUtil.Parse(phoneNumberString, "US");
-            
-            return nb.IsValidNumber;
+            return IsValidNumber(GetSelection());          
         }
+
+        
 
         public void DialNumber(Office.IRibbonControl control)
         {
-            if (!string.IsNullOrWhiteSpace(_passwordEncoded))
-            {
-                var cred = new NetworkCredential(_username, Decode(_passwordEncoded));
-                var test = new ClickToCall.Commands();
-                test.MakeCall(cred, IPAddress.Parse(_phoneIP), GetNumber());
-            }
+            CheckAndCall(()=>_clickToCall.MakeCall(_credential, IPAddress.Parse(PhoneIP), GetNumber()));
         }
 
         private string GetNumber()
