@@ -15,6 +15,16 @@ namespace OfficeCiscoDialer_ExcelAddIn
             {
                 InitilizeCredential();
             }
+
+            Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
+        }
+
+        private void Default_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Password")
+            {
+                InitilizeCredential();
+            }
         }
 
         private string EncodedPassword

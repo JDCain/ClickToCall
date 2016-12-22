@@ -22,10 +22,10 @@
             <button id="btnTest" label="Test Settings" onAction="TestSettings" imageMso="BevelShapeGallery" />
           </primaryItem>
           <topItems>
-            <layoutContainer id="layoutOne" layoutChildren="vertical">
-              <editBox id="userName" onChange="Username_TextChanged" label="Username" getText="GetUsername" alignLabel="topRight"/>
-              <editBox id="passWord" onChange="Password_TextChanged" label="Password" getText="GetPassword"/>
+            <layoutContainer id="layoutOne" layoutChildren="vertical" expand="neither">
               <editBox id="phoneIP" onChange="PhoneIP_TextChanged" label="Phone IP" getText="GetPhoneIP" />
+              <editBox id="userName" onChange="Username_TextChanged" label="Username" getText="GetUsername" alignLabel="topRight"/>
+              <button id ="passWord" label="Enter Password" onAction="PasswordDialog" expand="horizontal"/>              
             </layoutContainer>
           </topItems>
         </group>
