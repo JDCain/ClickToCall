@@ -38,8 +38,6 @@ namespace OfficeCiscoDialer_ExcelAddIn
             return IsValidNumber(GetSelection());          
         }
 
-        
-
         public void DialNumber(Office.IRibbonControl control)
         {
             CheckAndCall(()=>_clickToCall.MakeCall(_credential, IPAddress.Parse(PhoneIP), GetNumber()));

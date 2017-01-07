@@ -14,10 +14,10 @@ namespace ClickToCallTests
     [TestClass()]
     public class ClickToCallTests
     {
-        private static readonly string _username = "***REMOVED***";
+        private static readonly string _username = "jerry.cain";
         private static readonly string _password = "";
         private readonly NetworkCredential _credential = new NetworkCredential(_username, _password);
-        private readonly IPAddress _ipAddress = IPAddress.Parse("***REMOVED***");
+        private readonly IPAddress _ipAddress = IPAddress.Parse("10.8.129.17");
         private string ringXml = @"<CiscoIPPhoneExecute><ExecuteItem Priority='2' URL='Play:Classic1.raw' /></CiscoIPPhoneExecute>";
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace ClickToCallTests
             bool result = false;
             try
             {
-                result = instance.MakeCall(_credential, _ipAddress, "9***REMOVED***");
+                result = instance.MakeCall(_credential, _ipAddress, "96145897726");
             }
             catch (Exception e)
             {

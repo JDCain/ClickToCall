@@ -29,8 +29,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>https://***REMOVED***.blob.core.windows.net/labs/OfficeCiscoDialer/ExcelAddIn/</PublishUrl>
-    <InstallUrl>https://***REMOVED***.blob.core.windows.net/labs/OfficeCiscoDialer/ExcelAddIn/</InstallUrl>
+    <PublishUrl>https://ecot.blob.core.windows.net/labs/OfficeCiscoDialer/ExcelAddIn/</PublishUrl>
+    <InstallUrl>https://ecot.blob.core.windows.net/labs/OfficeCiscoDialer/ExcelAddIn/</InstallUrl>
     <TargetCulture>en</TargetCulture>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
